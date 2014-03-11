@@ -60,5 +60,5 @@ package:
 	cp *.ttf ${PKG_FONT}
 	cp ../shaders/* ${PKG_SHADERS}
 	cp ../scripts/* ${PKG_SCRIPTS}
-	cp -r ../licenses ${PKG_DIR}
+	cp -r ../licenses ${PKG_ROOT}
 	${CXFREEZE} ../src/launcher.py --target-dir=${PKG_BIN}
