@@ -18,11 +18,8 @@ not implemented yet).  That is the basic idea.
 Obviously, with opengl, comes the ability to use the end users video
 hardware to seemlessly utilize filters.  Also, easy "screen shot"
 stuff using render to texture, for the purpose of creating wallpapers.
-
-The user interface will basically suck.  But it will be awesome for
-me, and that's all that counts.  I'm thinking more or less a basic
-menu, with more advance functionality available through a console of
-sorts.  Not entirely sure.  hrmmm.
+Unfortunately, these features are not implemented yet.
 
 As it stands now, there is no menu in bcve, but it does have a
-launcher, that can be used open files with bcve for viewing.
+launcher, that can be used open files with bcve for viewing.  See
+docs/instructions.txt for more information.

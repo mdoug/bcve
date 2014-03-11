@@ -1,0 +1,15 @@
+Hi, thanks for using the Best. Comic. Viewer. Ever.  Just double click
+on launcher.exe, choose your .cbz or .cbr file by clicking on "open file",
+and then click "launch bcve".
+
+You can adjust options on the left hand side of the launcher window.
+Also, you can select a directory that is filled with .JPG files, and
+BCVE will load the files in them as if they were archived.
+
+Please note that BCVE is not currently aple to gracefully handle large
+comic books, so please just use it on single issues for now.  If you
+want to read a large book with bcve, currently the only option is to
+open it with an archive viewer (.cbr and .cbz files are really .rar
+and .zip files, respectively), and to unzip some of the files into a
+directory.  Then this directory can be viewed with bcve as if it were
+any other folder of .JPG files.

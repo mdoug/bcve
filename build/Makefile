@@ -41,24 +41,27 @@ clean:
 PKG_ROOT="./package"
 PKG_BIN=${PKG_ROOT}
 PKG_FONT=${PKG_BIN}
-PKG_DOC=${PKG_ROOT}/doc
+#PKG_DOC=${PKG_ROOT}/docs
 PKG_SHADERS=${PKG_ROOT}/shaders
 PKG_SCRIPTS=${PKG_ROOT}/scripts
 
 LAUNCHER_EXEC=${PKG_BIN}/launcher.exe
-${LAUNCHER_EXEC}: ${SRC_DIR}/launcher.py
-	${CXFREEZE} ${SRC_DIR}/launcher.py --target-dir=${PKG_BIN}
+${LAUNCHER_EXEC}: ../src/launcher.py
+	${CXFREEZE} ../src/launcher.py --target-dir=${PKG_BIN}
 
 package:
 	mkdir ${PKG_ROOT}
-	mkdir ${PKG_DOC}
+#	mkdir ${PKG_DOC}
 	mkdir ${PKG_SHADERS}
 	mkdir ${PKG_SCRIPTS}
 	cp ${EXECUTABLE} ${PKG_BIN}
 	cp 7z.exe ${PKG_BIN}
 	cp *.dll ${PKG_BIN}
 	cp *.ttf ${PKG_FONT}
+	cp ../LICENSE ${PKG_ROOT}
+	cp ../README ${PKG_ROOT}
 	cp ../shaders/* ${PKG_SHADERS}
 	cp ../scripts/* ${PKG_SCRIPTS}
+	cp -r ../docs ${PKG_ROOT}
 	cp -r ../licenses ${PKG_ROOT}
 	${CXFREEZE} ../src/launcher.py --target-dir=${PKG_BIN}
