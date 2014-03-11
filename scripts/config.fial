@@ -1,0 +1,44 @@
+/* this is to configure stuff.  */
+
+pick_config {
+
+ /*************************************************************
+ * 	  						      *
+ * Choose config here.  Else you can write your own little    *
+ * config procedure and call it from here. 		      *
+ *	  						      *
+ * choices are:						      *
+ *							      *
+ * window_720p;						      *
+ * fullscreen_720p;					      *
+ * fullscreen_1080p;					      *
+ * 							      *
+ *************************************************************/
+
+window_720p;
+
+}
+
+window_720p {
+	fullscreen = 0;
+	width = 1280;
+	height = 720;
+}
+
+fullscreen_720p {
+	fullscreen = 1;
+	width = 1280;
+	height = 720;
+}
+
+fullscreen_1080p {
+	fullscreen = 1;
+	width = 1920;
+	height = 1080;
+}
+
+configure ( fullscreen,
+	    width,
+	    height ){
+	pick_config;
+}

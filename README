@@ -1,0 +1,28 @@
+This is the Best. Comics. Viewer. Ever.  It is the first application
+written using my embedded language FIAL, and in some ways, providing a
+use case for that language is this applications real primary purpose.
+However, that being said, its not called the bcve for nothing!  It's
+called that for one reason, comic book fans -- because I figured, hey,
+why not.
+
+The application will use opengl for rendering, utilizing SDL for user
+interface stuff, and the event loop, and I think threads as well --
+basically, if it's available for SDL, I'll use SDL, and that will ease
+any ports later.  Hopefully.
+
+So the basic idea is this -- the images of the comic pages will be
+laid out sequentially, and the user can scroll through them left to
+right or right to left or whatever, and eventually rotate them (i.e.,
+not implemented yet).  That is the basic idea.
+
+Obviously, with opengl, comes the ability to use the end users video
+hardware to seemlessly utilize filters.  Also, easy "screen shot"
+stuff using render to texture, for the purpose of creating wallpapers.
+
+The user interface will basically suck.  But it will be awesome for
+me, and that's all that counts.  I'm thinking more or less a basic
+menu, with more advance functionality available through a console of
+sorts.  Not entirely sure.  hrmmm.
+
+As it stands now, there is no menu in bcve, but it does have a
+launcher, that can be used open files with bcve for viewing.

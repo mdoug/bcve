@@ -1,0 +1,135 @@
+------------------------------------------------------------
+|
+|  TODO --
+|
+------------------------------------------------------------
+
+Ok, new goal: get a 0.0.1 release.  Honestly, this program is already
+in a somewhat usable state, someone might like it better than what
+they are using.
+
+Ok, I am pretty confortable with this as it is, I want to clean up
+that help screen on the left there.  After that it's just a question
+of double checking that all the licenses are in order for the
+distribution.
+
+--------------------
+
+Well, I've added in stacks using FIAL in this project, and I already
+have something of a button callback mechanism, I'm just going to
+muddle onward for now, on the theory that a little more experience
+will be helpful...
+
+Actually, do I need to refactor everything here?  Can't I just add
+basic menus without rewriting everything?  I mean, just because it is
+stuff that will obviously have to be done eventually, doesn't mean it
+obviously has to be done now.  I have a ton of shit to do.  Some of
+this stuff amounts to "delete just about everything and start over",
+which is fine, I'm just figuring out how to go about using FIAL, but
+there is a basic minimum I want to get done, so that I have a base
+program that people can use while I rewrite everything.
+
+Also, at some point, this is going to have to become a side project,
+and before that point hits, I want it to be a more usable program.
+
+And, actually, I think if I just throw on a basic menu, with a quit
+option, and a help option, somebody would probably find it useful
+already.  So I could at least put it out there and see if people like
+it.
+
+------------------------------
+
+(*) UI hot fix, basic menus.  Need a menu structure, a current menu
+    variable,  a state variable -- probably just on or off.
+
+(*) Need a splash screen for when the image loads.
+
+(*) filters!  But I need a more sophisticated UI first, some of the
+    filters would be per image, etc, etc.  So, really, this probably
+    has to be put on the back burner for a while.  But it will be
+    awesome!  Start with the ones from GPU Gems.
+
+(*) figure out loading / unloading, maybe to start with have a set
+    number in each strip, and then load a new strip when you get to
+    the end.  Or, slightly more advanced, have 3 active strips at a
+    time, when you move from the center one to a side one, drop the
+    first, and load the next.  This is maybe a tad tricky, assuming
+    the loading will be done in the background.
+
+(*) Switch to libjpeg, and if needed, add libpng.  SDL2_image is just
+    a mess with opengl, getting at the information needed to get the
+    right OpenGL settings is just not something the library is
+    designed to accomplish easily, and since I only need jpgs for now,
+    I will just switch.  I'm not losing anything here, jpg is the only
+    thing that is really supported anyway with the current code.
+
+(*) UI, refactor everything --
+
+        (*) Make it so drawing is done from FIAL.  Not entirely sure
+            what is required here, I guess a way to set uniforms, and
+	    take it from there.
+
+	(*) Rework it so that all the event processing is done in
+	    FIAL.  That is the most flexible thing.  For this to even
+	    remotely work though, I need some sort of ability to hold
+	    procedures and or libraries, and the ability to call these
+	    things from FIAL -- maybe in their own execution
+	    environment if that's easier.  Also, I need a reasonable
+	    way to program in FIAL, or in other words, I need to add
+	    in fifos and stacks.
+
+	(*) ok, text has to be fixed up a bit, but it is working as a
+	    proof of concept.  I would like to be able to have
+	    multiple types, for instance.  But the hard work is done.
+
+	(*) at some point I will probably have to go fix the top level
+	    interface of FIAL.  No problemo.
+
+----------
+
+idears!
+
+----------
+
+Ok, opengl stuff --
+
+types:
+
+shader               (can store by filename),
+program              (id tag em),
+uniform locations -- not strictly speaking necessary at first, can
+                     just set from name, one at a time, by looking up
+                     locations as needed.
+textures --          already somewhat handled by the image structure, can start
+                     with that and refactor as needed.
+meshes               Not really an issue here, there is only one mesh!
+
+programs are made from shaders, but after creation they are not really
+related anymore.  In fact I could not have them as an object, worry
+about that later.  Caching them is an optomization. Locations are
+related to programs, textures are related to objects.
+
+--------------------------------------------------
+
+No longer relevant, but still a valid sentiment --
+
+-------------------------------------------------
+
+Need a global data structure for my buttons.  Though, I must say, I
+think I prefer doing this by the C api, since it isn't particularly
+hard (I just use the FIAL_symbol map, and helper functions, and maybe
+a little cut and paste,) and I really don't think there is a silver
+bullet solution for doing it at the FIAL level.
+
+There's just too many different solutions for handling it, including
+simple ones, such as only use it when running in a particular thread,
+simply locking it, having it populated by one fial script, in one
+interpreter, stopping that script from accesssing it, and then having
+it be read only in another interpreter.
+
+And those are just the easy ones, that I thought of right now.  I just
+don't think I have the ability to create one way to deal with global
+data, in a language that is meant to exist in a multithreaded
+environment, without imposing design constraints on the hosting
+program.  But -- as long as adding relatively easy solutions is a
+relatively easy task, this is really the best that I can hope to do.....

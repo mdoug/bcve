@@ -1,0 +1,356 @@
+ll {
+   omni, load (sym, lib);
+}
+
+load {
+     var sym, lib ;
+     sym = $bcve;
+     lib = "bcve";
+     ll;
+
+     sym = $btn;
+     lib = "button";
+     ll;
+
+     sym = $sys;
+     lib = "system";
+     ll;
+
+     sym = $txt;
+     lib = "text_buf";
+     ll;
+}
+
+lookup(v) {
+       var tmp;
+
+       bcve, load(tmp, sym);
+       v = tmp;
+       bcve, save(sym, tmp);
+}
+
+log_something {
+       var str;
+       str = "log me something....";
+       bcve, print_to_log(str);
+}
+
+/* ok, have to change this, I am now going to use the global storage
+for this stuff.  */
+
+update () {
+       var sym, i, size, tmp, str;
+
+       sym = $i;
+       bcve, load (tmp, sym);
+       i = tmp;
+       bcve, save (sym, tmp);
+
+       str = "in update..... i, tmp, size :";
+       sym = $size;
+       lookup(size);
+
+       bcve, print_to_log (str, i, tmp, size);
+
+       i = i + 1;
+       if (i > size) {
+       	  i = 1;
+       }
+       sym = $size;
+       bcve, save(sym, size);
+
+       str = "about to enter mini block thingy";
+       bcve, print_to_log(str);
+       {
+           var tmp;
+	   tmp = i;
+	   sym = $i;
+	   bcve, save (sym, i);
+	   i = tmp;
+       }
+
+       str = "out of mini block...";
+       bcve, print_to_log(str);
+
+       var array, button, copy;
+
+       sym = $buttons;
+       bcve, load(array, sym);
+
+       str = "performing ops....";
+       bcve, print_to_log(str);
+
+       array, get (button , array, i);
+       btn,  copy (copy   , button);
+       array, set (array  , i, button);
+       bcve, save (sym    , array);
+
+       str = "about to clear buttons.....";
+       bcve, print_to_log (str, i, tmp, size);
+/*
+       btn, clear;
+       btn, activate(copy);
+*/
+}
+
+min (a, b, c) {
+    if (b < c) {
+       a = b;
+       break min;
+    }
+    a = c;
+}
+
+setup_button (but, file, start) {
+
+     btn, create (but, file);
+
+     var scn_h, scn_w, btn_h, btn_w, str;
+
+     str = "made button from file: ";
+     bcve, print_to_log(str, file);
+
+     bcve, get_screen_w (scn_w);
+     bcve, get_screen_h (scn_h);
+
+     str = "screen h, w:";
+     bcve, print_to_log(str, scn_w, scn_h);
+
+     btn, get_w(btn_w, but);
+     btn, get_h(btn_h, but);
+
+     btn_w = btn_w * 1.0;
+     btn_h = btn_h * 1.0;
+     scn_w = scn_w * 1.0;
+     scn_h = scn_h * 1.0;
+
+     var rw, rh;
+     rw = scn_w / btn_w;
+     rh = scn_h / btn_h;
+
+     var v, t;
+     min (v, rw, rh);
+     t = 1.0;
+     min (v, t, v);
+
+     var s_w, s_h, s_v;
+     s_w =  "btn_w: ";
+     s_h = ",btn_h: ";
+     s_v = ",v: ";
+     bcve, print_to_log(s_w, btn_w, s_h, btn_h, s_v, v);
+
+     btn_w = btn_w * v;
+     btn_h = btn_h * v;
+
+     str = "about to set....";
+     bcve, print_to_log(str);
+     bcve, print_to_log(s_w, btn_w, s_h, btn_h, s_v, v);
+
+     btn, set_dim(but, btn_w, btn_h);
+
+     var x, y;
+     else {
+          if(start == 0) {
+	       x = scn_w - btn_w;
+	       y = scn_h - btn_h;
+	       start = scn_w;
+	       break else;
+	 }
+	 x = start;
+	 y = scn_h-btn_h;
+	 start = start + btn_w;
+     }
+
+     btn, set_pos (but, x, y);
+     var callback;
+
+     callback = $update;
+     btn, set_callback(but, callback);
+}
+
+get_filename(file) {
+	var i;
+	i = 2;
+	bcve, get_input_file(file);
+}
+
+
+init {
+     load;
+
+     var btns, cpy, dir, dirname, size, i;
+     var bool, slash, comspec ;
+
+     get_files{
+          slash   = "/";
+	  get_filename(dirname);
+	  sys, is_dir(bool, dirname);
+
+	  if(bool) {
+	  	   sys, read_dir(dir, dirname);
+		   break get_files;
+          }
+	  /* else */
+	  var cmd, str, tmp, clean, quote, exec_path, temp_dir_str;
+
+	  quote = "\"";
+	  bcve, get_exec_path(exec_path);
+	  str = "COMSPEC";
+	  sys, get_env (comspec, str);
+
+
+/*	  str = "c:/Users/Malcolm/comp_stuff/projects/bcve/build/TMP\" \"";
+	  txt, append(cmd, str);*/
+/*	  txt, append(cmd, quote); */
+
+/*
+
+	Temp dir has been moved to bcve.c, so that I could attach it
+	as an atexit process.  Still not entirely confident in using
+	FIAL in that compacity, I guess.
+
+	  var mkdir, tmp_dir;
+
+	  str = "TEMP";
+	  sys, get_env(temp_dir_str, str);
+	  txt, create(tmp_dir);
+	  txt, append(tmp_dir, temp_dir_str);
+	  str = "\\TMP_bcve_TMP";
+	  txt, append(tmp_dir, str);
+
+	  txt, create(mkdir);
+	  txt, append(mkdir, quote);
+	  txt, append(mkdir, comspec);
+	  str = "\" /C \"mkdir \"";
+	  txt, append(mkdir, str);
+	  txt, append(mkdir, tmp_dir);
+	  txt, append(mkdir, quote);
+
+	  sys, run(mkdir);
+*/
+
+	var tmp_dir;
+	bcve, get_temp_dir (tmp_dir);
+
+	  txt, create(clean);
+	  txt, append(clean, quote);
+	  txt, append(clean, comspec);
+
+	  str = "\" /C \"del /S /Q /F \"";
+	  txt, append(clean, str);
+	  txt, append(clean, tmp_dir);
+	  str = "\"\"";
+	  txt, append(clean, str);
+	  bcve, print_to_log(clean);
+	  sys, run(clean);
+
+	  txt, create(cmd);
+	  txt, append(cmd, quote);
+	  txt, append(cmd, exec_path);
+	  str = "7z.exe\" e -o\"";
+	  txt, append(cmd, str);
+	  txt, append(cmd, tmp_dir);
+	  str = "\" \"";
+	  txt, append(cmd, str);
+	  txt, append(cmd, dirname);
+	  txt, append(cmd, quote);
+
+	  bcve, print_to_log(cmd);
+	  sys, run(cmd);
+
+	  txt, create(cmd);
+	  txt, append(cmd, quote);
+	  txt, append(cmd, comspec);
+	  str = "\" /C \"del \"";
+	  txt, append(cmd, str);
+	  txt, append(cmd, tmp_dir);
+	  str = "\\*.png\"\"";
+	  txt, append(cmd, str);
+
+	  bcve, print_to_log(cmd);
+	  sys, run(cmd);
+
+	  txt, create(dirname);
+	  txt, append(dirname, tmp_dir);
+	  sys, read_dir(dir, dirname);
+     }
+
+     i = 1;
+     array, size(size, dir);
+     array, create(btns);
+
+     var start;
+     start = 0;
+
+     loop {
+     	  if(i > size) {
+	       break loop;
+	  }
+
+	  var but, file, buf, copy;
+	  txt, create(buf);
+
+	  array, get (file, dir, i);
+
+	  txt, append(buf, dirname);
+	  txt, append(buf, slash);
+	  txt, append(buf, file);
+
+	  setup_button(but, buf, start);
+	  btn, copy (copy, but);
+
+	  array, set (btns, i, but);
+	  btn, activate(copy);
+
+	  i = i  + 1;
+	  continue;
+     }
+
+     var but;
+     i = 1;
+
+     array, get (but, btns, i);
+     btn, copy (cpy, but);
+     array, set (btns, i, but);
+
+     var sym;
+     sym = $i;
+     i = 1;
+     bcve, save(sym, i);
+     sym = $size;
+     array, size(i, btns);
+     bcve, save(sym, i);
+     sym = $buttons;
+     bcve, save(sym, btns);
+
+     btn, activate(cpy);
+}
+
+handle_mouse_move(type, x, y, l_button, r_button )
+{
+	var sym, btns;
+	var i, j;
+
+	var scale;
+	bcve, get_scale(scale);
+
+
+	if(r_button) {
+              var tmp;
+	      y = .005 * y;
+	      tmp = scale + y;
+	      if(tmp > .2) {
+	      	     if (tmp < 20 ) {
+		     	scale = tmp;
+ 		     }
+	      }
+	      bcve, set_scale(scale);
+	}
+
+	if(l_button) {
+              y = y * -1;
+	      y = y / scale;
+	      x = x / scale;
+	      bcve, update_offsets(x, y);
+	}
+}

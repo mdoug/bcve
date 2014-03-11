@@ -1,0 +1,36 @@
+load 
+{
+	var sym, str;
+	sym = $stack
+	str = "scripts/stack.fial"
+	omni, load (sym, str);
+}
+
+on_mouse_move(type, x, y, l_button, r_button )
+{
+	var sym, btns;
+	var i, j;
+
+	var scale;
+	bcve, get_scale(scale);
+
+	if(r_button) {
+              var tmp;
+	      y = .005 * y;
+	      tmp = scale + y;
+	      if(tmp > .2) {
+	      	     if (tmp < 20 ) {
+		     	scale = tmp;
+ 		     }
+	      }
+	      bcve, set_scale(scale);
+	}
+
+	if(l_button) {
+              y = y * -1;
+	      y = y / scale;
+	      x = x / scale;
+	      bcve, update_offsets(x, y);
+	}
+}
+

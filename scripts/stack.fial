@@ -1,0 +1,121 @@
+/*
+ * it is crazy that this took 100 lines -- it would be like 2 in python.
+ *
+ * But -- i think part of the problem is that these data structures
+ * aren't great for this style, and a stack should be a lot better.
+ *
+ * What to do about associative stuff is a whole other matter.
+ *
+ * Honestly, it would be easier to use stacks than maps at this point.
+ * I.e., first item is name, second is address, third is blah ba blah,
+ * take em off, popem on a stack, reverse it back.  Not great for
+ * global stuff, maybe, but global stuff isn't as bad, since you don't
+ * have to copy the thing and put it back.  Alternatively, adding in
+ * copying might solve some of this, but it's not really an "answer",
+ * since a performant language can't just copy everthing all the time.
+ * I.e., there has to be a "faster" way to do it.
+ */
+
+load
+{
+	var type, sym;
+	omni, register(type);
+	sym = $type;
+	global, set(sym, type);
+}
+
+create(s)
+{
+	var sym, type, array;
+
+	sym = $type;
+	global, lookup(type, sym);
+	map, create(s);
+	map, set(s, sym, type);
+
+	sym = $array;
+	array, create(array);
+	map, set(s, sym, array);
+
+	var head;
+	head = 0;
+	sym = $head;
+	map, set(s, sym, head);
+}
+
+push(s, v)
+{
+	var type,type2,  tmp, sym ;
+	sym = $type;
+	global, lookup(type, sym);
+	map, lookup(tmp, s, sym);
+	type2 = tmp;
+	map, set(s, sym, tmp);
+	if type == type2 {
+		var head, array;
+		sym = $array;
+		map, lookup(array, s, sym);
+		sym = $head;
+		map, lookup(head, s, sym);
+		head = head + 1;
+		array, set(array, head, v);
+		sym = $array;
+		map, set(s, sym, array);
+		sym = $head;
+		map, set(s, sym, head);
+	}
+}
+
+pop(v, s)
+{
+	var none;
+	var type, type2,  tmp, sym ;
+	sym = $type;
+	global, lookup(type, sym);
+	map, lookup(tmp, s, sym);
+	type2 = tmp;
+	map, set(s, sym, tmp);
+	if type == type2 {
+		var head, array;
+		sym = $array;
+		map, lookup(array, s, sym);
+		sym = $head;
+		map, lookup(head, s, sym);
+		if(head == 0) {
+			sym = $array;
+			map, put(s, sym, array);
+			sym = $head;
+			map, put(s, sym, head);
+			break pop;
+		}
+		array, get(v, array, head);
+		head = head - 1;
+		sym = $array;
+		map, set(s, sym, array);
+		sym = $head;
+		map, set(s, sym, head);
+	}
+}
+
+size (v, s)
+{
+	var type_s, type_g, sym, none, tmp;
+	sym = $type;
+	map, lookup(type_s, s, sym);
+	global, lookup(type_g, sym);
+	tmp = type_s;
+	map, set(s, sym, tmp);
+	else {
+		if(type_s == type_g) {
+			if(type_s == none) {
+				/* note to self: errors*/
+				not_declared = $error;
+			}
+			sym = $head;
+			map, lookup(v, s, sym);
+			tmp = v;
+			map, set(s, sym, tmp);
+			break size;
+		}
+	}
+}

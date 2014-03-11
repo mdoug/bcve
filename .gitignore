@@ -1,0 +1,20 @@
+#ignore some stuff....
+
+#this is for my build directory.  Which I have called my_build.
+#I am super creative!
+my_build/*
+
+#stuff from emacs
+*~
+\#*#
+TAGS
+
+#some images I must have used for testing
+images/*
+
+#standard issue binary ignoring....
+*.o
+*.a
+*.exe
+*.lib
+*.dll

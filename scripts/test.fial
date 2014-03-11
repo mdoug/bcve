@@ -1,0 +1,44 @@
+load
+{
+	var sym, str;
+	sym = $stack;
+	str = "stack.fial";
+	omni, load(sym, str);
+	stack, load;
+}
+
+run
+{
+	load;
+	var s, i, j;
+	stack, create(s);
+
+	i = 0;
+	j = 25;
+
+	loop {
+		if (i == j) {
+			break loop;
+		}
+		var tmp;
+		tmp = i;
+		i = i + 1;
+		tmp = 2 * tmp;
+		stack, push (s, tmp);
+		continue;
+	}
+	i = 0;
+	loop {
+		var size;
+		if( i == j ) {
+			break loop;
+		}
+		var tmp, str;
+		stack, pop(tmp, s);
+		stack, size(size, s);
+		str = "tmp, i, size:";
+		omni, print(str, tmp, i, size);
+		i = i + 1;
+		continue;
+	}
+}

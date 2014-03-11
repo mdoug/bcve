@@ -1,0 +1,70 @@
+bcve.c:379:int init_test_image (struct image *img, struct button_draw_stuff *bds)
+bcve.c:488:	struct image img_test;
+bcve.c~:378:int init_test_image (struct image *img, struct button_draw_stuff *bds)
+bcve.c~:487:	struct image img_test;
+button.h:71:	struct image         *img;
+button.h~:70:	struct image      *img;
+text.c:43:int allocate_image_buffer (struct image *img)
+text.c:55:int write_string (struct image *img, char *str, int x_border, int y_border)
+text.c:83:int alloc_image_for_strips (struct image *img, struct string_strips *strips)
+text.c:98:int write_strip (struct image *img, struct pixel_bounding_box *pbb,
+text.c:128:int write_slot (struct image *img, FT_GlyphSlot slot, int offset_x, int offset_y)
+text.c:149:int make_test_image (struct image *img)
+text.c~:36:int allocate_image_buffer (struct image *img)
+text.c~:48:int write_string (struct image *img, char *str)
+text.c~:67:int alloc_image_for_strips (struct image *img, struct string_strips *strips)
+text.c~:82:int write_strip (struct image *img, char *strip, int pen_x, int pen_y)
+text.c~:105:int write_slot (struct image *img, FT_GlyphSlot slot, int offset_x, int offset_y)
+text.c~:126:int make_test_image (struct image *img)
+text.h:33:int allocate_image_buffer (struct image *img);
+text.h:34:int make_test_image (struct image *img);
+text.h:35:int write_slot (struct image *img, FT_GlyphSlot slot, int offset_x, int offset_y);
+text.h:36:int write_strip (struct image *img, char *strip, int pen_x, int pen_y);
+text.h:38:int alloc_image_for_strips (struct image *img, struct string_strips *strips);
+text.h~:24:int allocate_image_buffer (struct image *img);
+text.h~:25:int make_test_image (struct image *img);
+text.h~:26:int write_slot (struct image *img, FT_GlyphSlot slot, int offset_x, int offset_y);
+text.h~:27:int write_strip (struct image *img, char *strip, int pen_x, int pen_y);
+text.h~:29:int alloc_image_for_strips (struct image *img, struct string_strips *strips);
+texture.c:16:static struct image *top_image = NULL;
+texture.c:18:void destroy_image(struct image *img)
+texture.c:29:void image_inc_ref (struct image *img)
+texture.c:34:void image_dec_ref (struct image *img)
+texture.c:43:	static struct image *iter, *tmp;
+texture.c:55:struct image *get_image(const char *filename)
+texture.c:57:	struct image *iter, *new_image = NULL;
+texture.c:94:SDL_Surface * get_surface (struct image *img)
+texture.c:114:void delete_surface(struct image *img)
+texture.c:189:GLuint get_texture (struct image *img)
+texture.c:259:void delete_texture(struct image *img)
+texture.c~:16:static struct image *top_image = NULL;
+texture.c~:18:void destroy_image(struct image *img)
+texture.c~:29:void image_inc_ref (struct image *img)
+texture.c~:34:void image_dec_ref (struct image *img)
+texture.c~:43:	static struct image *iter, *tmp;
+texture.c~:55:struct image *get_image(const char *filename)
+texture.c~:57:	struct image *iter, *new_image = NULL;
+texture.c~:94:SDL_Surface * get_surface (struct image *img)
+texture.c~:114:void delete_surface(struct image *img)
+texture.c~:190:GLuint get_texture (struct image *img)
+texture.c~:260:void delete_texture(struct image *img)
+texture.h:25:struct image {
+texture.h:29:	struct image *next;
+texture.h:41:void destroy_image(struct image *img);
+texture.h:43:struct image *get_image(const char *filename);
+texture.h:44:SDL_Surface * get_surface (struct image *img);
+texture.h:45:void delete_surface(struct image *img);
+texture.h:46:GLuint get_texture (struct image *img);
+texture.h:47:void delete_texture(struct image *img);
+texture.h:48:void image_inc_ref (struct image *img);
+texture.h:49:void image_dec_ref (struct image *img);
+texture.h~:18:struct image {
+texture.h~:22:	struct image *next;
+texture.h~:33:void destroy_image(struct image *img);
+texture.h~:35:struct image *get_image(const char *filename);
+texture.h~:36:SDL_Surface * get_surface (struct image *img);
+texture.h~:37:void delete_surface(struct image *img);
+texture.h~:38:GLuint get_texture (struct image *img);
+texture.h~:39:void delete_texture(struct image *img);
+texture.h~:40:void image_inc_ref (struct image *img);
+texture.h~:41:void image_dec_ref (struct image *img);
