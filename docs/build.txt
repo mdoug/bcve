@@ -6,15 +6,31 @@ windows.
 
 Well, essentially the best way to do this, is to copy the Makefile in
 the ROOT/build directory out into its own directory, and then filling
-in the directories at the top.  The LIBNAME_CFLAGS are essentially to
-hold the include director flags[gcc -I], while the LDFLAGS are to hold
-the library directory flags, [gcc -L].  For SDL and freetype, it is
-simplest to just copy in the [LIB]-config script from those libraries
-into your build folder.
+in the directories at the top.  The destination directory must also be
+directly off of the ROOT directory.  If you don't copy, you run the
+risk of your makefile getting clobbered when you deal with git, since
+the makefile is in the repository.  So, from the root directory:
+
+cp -r build your_build_dir
+
+Then, you have to configure your makefile. The LIBNAME_CFLAGS are
+essentially to hold the include director flags[gcc -I], while the
+LDFLAGS are to hold the library directory flags, [gcc -L].  For SDL
+and freetype, it is simplest to just copy in the [LIB]-config script
+from those libraries into your build folder.
 
 Then, the next step is to copy all the dll's and required .exe's into
 that build directory, which is where the "make package" command is
-going to expect them.  Then, to build, you simply run:
+going to expect them.
+
+Currently needed:
+
+(*) the dejavu font "DejaVuSansMono.ttf"
+(*) 7z.exe and 7z.dll, from 7-zip.
+(*) SDL2, and SDL2_image, along with its assortment of DLL's.
+(*) freetype
+
+Then, to build, you simply run:
 
 make
 make package

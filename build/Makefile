@@ -55,10 +55,10 @@ package:
 	mkdir ${PKG_SHADERS}
 	mkdir ${PKG_SCRIPTS}
 	cp ${EXECUTABLE} ${PKG_BIN}
-	cp 7za.exe ${PKG_BIN}
 	cp 7z.exe ${PKG_BIN}
 	cp *.dll ${PKG_BIN}
 	cp *.ttf ${PKG_FONT}
 	cp ../shaders/* ${PKG_SHADERS}
 	cp ../scripts/* ${PKG_SCRIPTS}
+	cp -r ../licenses ${PKG_DIR}
 	${CXFREEZE} ../src/launcher.py --target-dir=${PKG_BIN}
