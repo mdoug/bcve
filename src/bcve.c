@@ -6,8 +6,18 @@
 #include <string.h>
 #include <assert.h>
 
+#ifdef WINDOWS
+
 #include <windows.h>
 #include <process.h>
+
+#else /* FREEBSD */
+
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+#endif
 
 #include "text.h"
 
@@ -33,6 +43,7 @@
 /* don't cast away the const here, I need this as set, since otherwise
    the program will leak temp files */
 
+
 char const *temp_dir = NULL;
 
 char script_file[256];
@@ -54,6 +65,12 @@ int FIAL_install_std_omnis (struct FIAL_interpreter *);
 int install_main_fi_lib (struct FIAL_interpreter *interp);
 int append_to_exec_path (char *buf, const char *str, int max_size);
 
+#ifdef WINDOWS
+#define SLASH_CHAR '\\'
+#else 
+#define SLASH_CHAR '/'
+#endif
+
 int set_temp_dir (void)
 {
 	extern FILE *logfile;
@@ -67,19 +84,32 @@ int set_temp_dir (void)
 	assert(!temp_dir);
 
 	memset(buf, 0, sizeof(buf));
+#ifdef WINDOWS
 	tmp = getenv("TEMP");
+#else  /* FREEBSD */
+	tmp = "/tmp/";
+#endif
 
 	for(head = buf; *tmp != '\0'; ++tmp, ++head)
 		*head = *tmp;
 
-	*(head++) = '\\';
+	*(head++) = SLASH_CHAR;
 	for(tmp = "TMP_bcve_TMP"; *tmp != '\0'; ++tmp, ++head)
 		*head = *tmp;
 
+#ifdef WINDOWS
 	CreateDirectory(buf, NULL);
+#else /* FREEBSD */
+	mkdir(buf, 0755);
+#endif
 
+#ifdef WINDOWS
 	pid = _getpid();
-	sprintf(head, "\\%d", pid);
+#else  /* FREEBSD */
+	pid = getpid();
+#endif
+	*(head++) = SLASH_CHAR;
+	sprintf(head, "%d", pid);
 
 	tmp = malloc(sizeof(buf));
 	if(!tmp) {
@@ -89,18 +119,28 @@ int set_temp_dir (void)
 	}
 	strcpy(tmp, buf);
 	temp_dir = tmp;
+#ifdef WINDOWS
 	if (!CreateDirectory(buf, NULL)) {
 		fprintf(logfile, "Couldn't create directory!");
 		exit(29);
 	} else {
 		fprintf(logfile, "Created dir %s\n", buf);
 	}
+#else 
+	if (mkdir(buf, 0755) == -1) {
+		fprintf(logfile, "Couldn't create directory!");
+		exit(29);
+	} else {
+		fprintf(logfile, "Created dir %s\n", buf);
+	}
+
+#endif
 	return 0;
 }
 
 /* I deny any cut and pasting occurred anywhere in the vacinity of the
  * following function. */
-
+#ifdef WINDOWS
 void exec_command (char *cmd)
 {
 	STARTUPINFO si;
@@ -121,6 +161,7 @@ void exec_command (char *cmd)
 		       &si,            // Pointer to STARTUPINFO structure
 		       &pi );           // Pointer to PROCESS_INFORMATION structure
 }
+#endif
 
 void delete_temp_dir (void)
 {
@@ -130,6 +171,9 @@ void delete_temp_dir (void)
 
 	memset(buf, 0, sizeof(buf));
 
+/* man this is awful, but it was easy to write.  FIXME */
+
+#ifdef WINDOWS
 	tmp = getenv("COMSPEC");
 	for(; *tmp != '\0'; ++tmp, ++head)
 		*head = *tmp;
@@ -144,7 +188,23 @@ void delete_temp_dir (void)
 	*(head++) = '\"';
 
 	exec_command(buf);
+
+#else /*FREEBSD */
+
+	/* actually, I am positive this does _not_ have spaces, in
+	 * FreeBSD the name is always /tmp/TMP_bcve_TMP/?????  where
+	 * ????? is the pid.*/
+
+	tmp = "rm -rf ";
+	for(; *tmp != '\0'; ++tmp, ++head)
+		*head = *tmp;
+
+	system(buf);
+	
+#endif /*FREEBSD */
+
 }
+
 
 
 struct FIAL_interpreter *get_FIAL_interpreter(FILE *logfile)

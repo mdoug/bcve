@@ -11,6 +11,8 @@
 #include "text.h"
 #include "FIAL.h"
 
+#include "value_def_short.h"
+
 #define SCREEN_WIDTH  1280
 #define SCREEN_HEIGHT 720
 
